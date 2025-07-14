@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import ForecastCard from './components/ForecastCard';
 
 function App() {
   const [weatherData, setWeatherData] = useState<{ generalSituation?: string; weatherForecast?: any[] } | null>(null);
@@ -88,20 +89,7 @@ function App() {
           >
             <KeyboardArrowLeftIcon />
           </IconButton>
-          {selectedForecast && (
-            <Card sx={{ width: 600, height: 650, margin: 0, display: 'flex', flexDirection: 'column' }}>
-              <CardContent>
-                <Typography variant="h6" component="div">
-                  Selected Forecast
-                </Typography>
-                <Box sx={{ overflow: 'auto', height: 550, mt: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', m: 0 }}>
-                    {JSON.stringify(selectedForecast, null, 2)}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          )}
+          {selectedForecast && <ForecastCard forecast={selectedForecast} />}
           <IconButton
             onClick={() => setSelectedIndex((prev) =>
               weatherData?.weatherForecast ? Math.min(prev + 1, weatherData.weatherForecast.length - 1) : prev
