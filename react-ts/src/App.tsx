@@ -14,6 +14,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 function App() {
   const [weatherData, setWeatherData] = useState<{ generalSituation?: string; weatherForecast?: any[] } | null>(null);
   const [selectedForecast, setSelectedForecast] = useState<any | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mode, setMode] = useState<'light' | 'dark'>('light');
@@ -49,9 +50,9 @@ function App() {
 
   useEffect(() => {
     if (weatherData && weatherData.weatherForecast && Array.isArray(weatherData.weatherForecast) && weatherData.weatherForecast.length > 0) {
-      setSelectedForecast(weatherData.weatherForecast[0]);
+      setSelectedForecast(weatherData.weatherForecast[selectedIndex]);
     }
-  }, [weatherData]);
+  }, [weatherData, selectedIndex]);
 
   if (loading) return <div>Loading weather data...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -81,22 +82,32 @@ function App() {
           </Card>
         )}
         <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
-          <IconButton>
+          <IconButton
+            onClick={() => setSelectedIndex((prev) => Math.max(prev - 1, 0))}
+            disabled={!weatherData?.weatherForecast || selectedIndex === 0}
+          >
             <KeyboardArrowLeftIcon />
           </IconButton>
           {selectedForecast && (
-            <Card sx={{ maxWidth: 600, margin: 0 }}>
+            <Card sx={{ width: 600, height: 650, margin: 0, display: 'flex', flexDirection: 'column' }}>
               <CardContent>
                 <Typography variant="h6" component="div">
                   Selected Forecast
                 </Typography>
-                <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                  {JSON.stringify(selectedForecast, null, 2)}
-                </Typography>
+                <Box sx={{ overflow: 'auto', height: 550, mt: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', m: 0 }}>
+                    {JSON.stringify(selectedForecast, null, 2)}
+                  </Typography>
+                </Box>
               </CardContent>
             </Card>
           )}
-          <IconButton>
+          <IconButton
+            onClick={() => setSelectedIndex((prev) =>
+              weatherData?.weatherForecast ? Math.min(prev + 1, weatherData.weatherForecast.length - 1) : prev
+            )}
+            disabled={!weatherData?.weatherForecast || selectedIndex === (weatherData?.weatherForecast?.length ?? 1) - 1}
+          >
             <KeyboardArrowRightIcon />
           </IconButton>
         </Box>
