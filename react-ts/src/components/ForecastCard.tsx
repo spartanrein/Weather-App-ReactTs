@@ -90,6 +90,8 @@ const fieldLabels: Record<string, string> = {
 };
 
 function formatField(key: string, value: any) {
+  if (value === null) return 'null';
+  if (value === undefined) return 'undefined';
   switch (key) {
     case 'forecastDate':
       // Handle YYYYMMDD format
@@ -100,19 +102,17 @@ function formatField(key: string, value: any) {
         return `${year}-${month}-${day}`;
       }
       // Try to handle ISO or other formats
-      const date = new Date(value);
-      return isNaN(date.getTime()) ? String(value) : date.toLocaleDateString();
+      return typeof value === 'string' ? (isNaN(Date.parse(value)) ? value : new Date(value).toLocaleDateString()) : String(value);
     case 'minTemp':
     case 'maxTemp':
-      if (value && typeof value === 'object' && 'value' in value && 'unit' in value) {
-        return `${value.value}°${value.unit}`;
+      if (value && typeof value === 'object' && 'value' in value) {
+        return value.unit ? `${value.value}°${value.unit}` : `${value.value}`;
       }
       return String(value);
     case 'forecastMaxtemp':
     case 'forecastMintemp':
-      // If value is an object with value/unit, use that, else just append °C
       if (value && typeof value === 'object' && 'value' in value) {
-        return `${value.value}${value.unit ? `°${value.unit}` : ''}`;
+        return value.unit ? `${value.value}°${value.unit}` : `${value.value}`;
       }
       if (typeof value === 'string' || typeof value === 'number') {
         return `${value}`;

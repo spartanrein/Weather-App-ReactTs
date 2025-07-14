@@ -52,6 +52,8 @@ function App() {
   useEffect(() => {
     if (weatherData && weatherData.weatherForecast && Array.isArray(weatherData.weatherForecast) && weatherData.weatherForecast.length > 0) {
       setSelectedForecast(weatherData.weatherForecast[selectedIndex]);
+    } else {
+      setSelectedForecast(null);
     }
   }, [weatherData, selectedIndex]);
 
@@ -63,7 +65,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', bgcolor: 'background.default', color: 'text.primary', paddingTop:"1rm" }}>
-          <IconButton onClick={toggleColorMode} color="inherit">
+          <IconButton onClick={toggleColorMode} color="inherit" data-testid="theme-toggle">
             {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
       </Box>
@@ -86,6 +88,7 @@ function App() {
           <IconButton
             onClick={() => setSelectedIndex((prev) => Math.max(prev - 1, 0))}
             disabled={!weatherData?.weatherForecast || selectedIndex === 0}
+            data-testid="nav-left"
           >
             <KeyboardArrowLeftIcon />
           </IconButton>
@@ -95,6 +98,7 @@ function App() {
               weatherData?.weatherForecast ? Math.min(prev + 1, weatherData.weatherForecast.length - 1) : prev
             )}
             disabled={!weatherData?.weatherForecast || selectedIndex === (weatherData?.weatherForecast?.length ?? 1) - 1}
+            data-testid="nav-right"
           >
             <KeyboardArrowRightIcon />
           </IconButton>
