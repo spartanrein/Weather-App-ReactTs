@@ -8,9 +8,12 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 function App() {
-  const [weatherData, setWeatherData] = useState<{ generalSituation?: string } | null>(null);
+  const [weatherData, setWeatherData] = useState<{ generalSituation?: string; weatherForecast?: any[] } | null>(null);
+  const [selectedForecast, setSelectedForecast] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mode, setMode] = useState<'light' | 'dark'>('light');
@@ -33,6 +36,9 @@ function App() {
       })
       .then((data) => {
         setWeatherData(data);
+        if (data.weatherForecast && Array.isArray(data.weatherForecast) && data.weatherForecast.length > 0) {
+          setSelectedForecast(data.weatherForecast[0]);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -41,6 +47,12 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    if (weatherData && weatherData.weatherForecast && Array.isArray(weatherData.weatherForecast) && weatherData.weatherForecast.length > 0) {
+      setSelectedForecast(weatherData.weatherForecast[0]);
+    }
+  }, [weatherData]);
+
   if (loading) return <div>Loading weather data...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!weatherData) return <div>No data available.</div>;
@@ -48,7 +60,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', bgcolor: 'background.default', color: 'text.primary' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', bgcolor: 'background.default', color: 'text.primary', paddingTop:"1rm" }}>
           <IconButton onClick={toggleColorMode} color="inherit">
             {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
@@ -68,9 +80,28 @@ function App() {
             </CardContent>
           </Card>
         )}
-        
+        <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
+          <IconButton>
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+          {selectedForecast && (
+            <Card sx={{ maxWidth: 600, margin: 0 }}>
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  Selected Forecast
+                </Typography>
+                <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                  {JSON.stringify(selectedForecast, null, 2)}
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
+          <IconButton>
+            <KeyboardArrowRightIcon />
+          </IconButton>
+        </Box>
 
-        {/* <pre>{JSON.stringify(weatherData, null, 2)}</pre> */}
+        
     </ThemeProvider>
   );
 }
