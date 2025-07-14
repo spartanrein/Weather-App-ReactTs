@@ -48,12 +48,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4, minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
-        <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', bgcolor: 'background.default', color: 'text.primary' }}>
           <IconButton onClick={toggleColorMode} color="inherit">
             {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
-        </Box>
+      </Box>
         <Typography variant="h3" component="h1" gutterBottom align="center">
           Weather Data
         </Typography>
@@ -69,8 +68,9 @@ function App() {
             </CardContent>
           </Card>
         )}
+        
+
         {/* <pre>{JSON.stringify(weatherData, null, 2)}</pre> */}
-      </Box>
     </ThemeProvider>
   );
 }
