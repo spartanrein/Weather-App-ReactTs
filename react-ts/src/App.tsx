@@ -18,7 +18,7 @@ function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useState<'light' | 'dark'>('dark');
 
   const theme = createTheme({
     palette: {
@@ -99,8 +99,6 @@ function App() {
             <KeyboardArrowRightIcon />
           </IconButton>
         </Box>
-
-        
     </ThemeProvider>
   );
 }
