@@ -8,6 +8,7 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { GlobalStyles } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ForecastCard from './components/ForecastCard';
@@ -64,11 +65,16 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', bgcolor: 'background.default', color: 'text.primary', paddingTop:"1rm" }}>
+      <GlobalStyles styles={(theme) => ({
+        html: { backgroundColor: theme.palette.background.default },
+        body: { backgroundColor: theme.palette.background.default },
+      })} />
+      <Box sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', paddingTop: '1rm' }}>
           <IconButton onClick={toggleColorMode} color="inherit" data-testid="theme-toggle">
             {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
-      </Box>
+        </Box>
         <Typography variant="h3" component="h1" gutterBottom align="center">
           Weather Data
         </Typography>
@@ -103,6 +109,7 @@ function App() {
             <KeyboardArrowRightIcon />
           </IconButton>
         </Box>
+      </Box>
     </ThemeProvider>
   );
 }
