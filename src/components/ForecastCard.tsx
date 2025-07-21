@@ -162,7 +162,9 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecast }) => {
           )}
         </Box>
         <Box sx={{ overflow: 'auto', height: 550, mt: 2 }}>
-          {forecast && Object.entries(forecast).map(([key, value]) => (
+          {forecast && Object.entries(forecast)
+            .filter(([key]) => key !== 'ForecastIcon' && key !== 'forecastIcon' && key !== 'icon' && key !== 'Icon' && key !== 'WeatherIcon')
+            .map(([key, value]) => (
             <Box key={key} sx={{ mb: 2, display: 'flex', alignItems: 'flex-start' }}>
               <Typography variant="subtitle2" color="text.secondary" sx={{ minWidth: 160, mr: 2 }}>
                 {fieldLabels[key] || key}

@@ -76,7 +76,7 @@ function App() {
           </IconButton>
         </Box>
         <Typography variant="h3" component="h1" gutterBottom align="center">
-          Weather Data
+          9 - Day Weather Forecast
         </Typography>
         {weatherData.generalSituation && (
           <Card sx={{ maxWidth: 600, margin: '2rem auto' }}>
